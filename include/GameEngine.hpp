@@ -189,6 +189,23 @@ public:
         }
     }
 
+protected:
+    // Calculate effective total attribute including inventory bonuses
+    int16_t GetEffectiveStat(const PlayerCharacter& p, uint8_t statType) {
+        int16_t val = 0;
+        if (statType == 0) val = p.stats.strength;
+        else if (statType == 1) val = p.stats.dexterity;
+        else if (statType == 2) val = p.stats.intelligence;
+
+        for (uint8_t i = 0; i < 2; ++i) {
+            const ItemEnchantment& ench = p.inventory[i].enchantment;
+            if (statType == 0 && ench.type == EnchantmentType::FLAT_STR_BONUS) val += ench.magnitude;
+            if (statType == 1 && ench.type == EnchantmentType::FLAT_DEX_BONUS) val += ench.magnitude;
+            if (statType == 2 && ench.type == EnchantmentType::FLAT_INT_BONUS) val += ench.magnitude;
+        }
+        return val;
+    }
+
 private:
     uint32_t m_seed;
     uint32_t Random() {
@@ -275,22 +292,6 @@ private:
             m_dungeon[i].cleared = false;
             m_dungeon[i].type = (i == MAX_ROOMS - 1) ? RoomType::BOSS_COMBAT : RoomType::REGULAR_COMBAT;
         }
-    }
-
-    // Calculate effective total attribute including inventory bonuses
-    int16_t GetEffectiveStat(const PlayerCharacter& p, uint8_t statType) {
-        int16_t val = 0;
-        if (statType == 0) val = p.stats.strength;
-        else if (statType == 1) val = p.stats.dexterity;
-        else if (statType == 2) val = p.stats.intelligence;
-
-        for (uint8_t i = 0; i < 2; ++i) {
-            const ItemEnchantment& ench = p.inventory[i].enchantment;
-            if (statType == 0 && ench.type == EnchantmentType::FLAT_STR_BONUS) val += ench.magnitude;
-            if (statType == 1 && ench.type == EnchantmentType::FLAT_DEX_BONUS) val += ench.magnitude;
-            if (statType == 2 && ench.type == EnchantmentType::FLAT_INT_BONUS) val += ench.magnitude;
-        }
-        return val;
     }
 
     // ========================================================================

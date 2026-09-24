@@ -13,10 +13,10 @@ if(NOT BUILD_MCU)
     # =========================================================================
     # DESKTOP SIMULATOR TARGET
     # =========================================================================
-    find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+    find_package(SFML 3 COMPONENTS Graphics Window System REQUIRED)
 
     add_executable(dungeon_sim src/main.cpp)
-    target_link_libraries(dungeon_sim PRIVATE sfml-graphics sfml-window sfml-system)
+    target_link_libraries(dungeon_sim PRIVATE SFML::Graphics SFML::Window SFML::System)
 
     # =========================================================================
     # UNIT TEST TARGET (Desktop Only)
